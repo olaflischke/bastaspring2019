@@ -30,10 +30,9 @@
   </AppConfig>
 </Query>
 
-string url = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
-//string url = @"\\atuin\Olaf\Entwicklung\LINQPad\LINQPad Queries\eurofxref-hist.xml";
+//string url = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
+string url = @"\\atuin\Olaf\Entwicklung\LINQPad\LINQPad Queries\eurofxref-hist-90d.xml";
 
-RecreateDb();
 
 Stopwatch sw = new Stopwatch();
 
@@ -41,6 +40,8 @@ sw.Start();
 XDocument doc = XDocument.Load(url);
 sw.Stop();
 $"XML geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds}ms).".Dump();
+
+RecreateDb();
 
 sw.Restart();
 IEnumerable<TradingDay> qTradingdays = from nd in doc.Root.Descendants()
@@ -54,7 +55,7 @@ sw.Stop();
 $"{list.Count} TradingDays erstellt in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds}ms).".Dump();
 
 TradingDayContext context1 = new TradingDayContext();
-//context1.Database.Log=LogIt;
+context1.Database.Log=LogIt;
 sw.Restart();
 foreach (TradingDay item in qTradingdays)
 {
@@ -67,7 +68,7 @@ $"Tradingdays einzeln hinzugefügt: {sw.ElapsedMilliseconds:N0}ms.".Dump();
 RecreateDb();
 
 TradingDayContext context2 = new TradingDayContext();
-//context2.Database.Log=LogIt;
+context2.Database.Log=LogIt;
 
 sw.Restart();
 context2.TradingDays.AddRange(qTradingdays);

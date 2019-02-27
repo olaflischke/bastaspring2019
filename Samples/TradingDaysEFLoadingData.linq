@@ -33,14 +33,14 @@
 
 Stopwatch sw = new Stopwatch();
 
-//sw.Start();
-//TradingDayContext context1 = new TradingDayContext();
-//List<TradingDay> list = context1.TradingDays.ToList();
-//
-//sw.Stop();
-//$"{list.Count} TradingDays flach geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
+sw.Start();
+TradingDayContext context1 = new TradingDayContext();
+context1.Database.Log=LogIt;
+List<TradingDay> list = context1.TradingDays.ToList();
+sw.Stop();
+$"{list.Count} TradingDays flach geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
 //list.Dump();
-//"------------------------------------------------------------------------------------------------------".Dump();
+"------------------------------------------------------------------------------------------------------".Dump();
 
 //sw.Restart();
 //TradingDayContext context2 = new TradingDayContext();
@@ -51,53 +51,52 @@ Stopwatch sw = new Stopwatch();
 //	List<ExchangeRate> rates = context2.ExchangeRates.Where(rate => rate.TradingDay.Id == element.Id).ToList();
 //	element.ExchangeRates = rates;
 //}
-//
+
 //sw.Stop();
 //$"{list2.Count} TradingDays mit ExchangeRates per Schleife geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
 ////list2.Dump();
 //"------------------------------------------------------------------------------------------------------".Dump();
 
-sw.Restart();
-TradingDayContext context3 = new TradingDayContext();
-context3.Database.Log = LogIt;
-List<TradingDay> list3 = context3.TradingDays.Include("ExchangeRates").ToList();
-sw.Stop();
-$"{list3.Count} TradingDays mit ExchangeRates per Include('NavigationPropName') geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
-//list3.Dump();
-"------------------------------------------------------------------------------------------------------".Dump();
-
-sw.Restart();
-TradingDayContext context4 = new TradingDayContext();
-context4.Database.Log = LogIt;
-List<TradingDay> list4 = context4.TradingDays.Include(td => td.ExchangeRates).ToList();
-sw.Stop();
-$"{list4.Count} TradingDays mit ExchangeRates per Include(Lambda) geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
-//list4.Dump();
-"------------------------------------------------------------------------------------------------------".Dump();
-
-sw.Restart();
-TradingDayContext contex5 = new TradingDayContext();
-contex5.Database.Log = LogIt;
-var qDays = (from td in contex5.TradingDays
-			 select new
-			 {
-				 td.Date,
-				 td.ExchangeRates
-			 }).ToList();
-sw.Stop();
-$"{qDays.Count} TradingDays mit ExchangeRates per Projektion geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
-//qDays.Dump();
-"------------------------------------------------------------------------------------------------------".Dump();
-
-
-sw.Restart();
-TradingDayContext context6 = new TradingDayContext();
-context6.Database.Log = LogIt;
-List<TradingDay> list6 = context4.TradingDays.Include(td => td.ExchangeRates).AsNoTracking().ToList();
-sw.Stop();
-$"{list6.Count} TradingDays mit ExchangeRates per Include(Lambda) ohne Tracking geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
-//list6.Dump();
-"------------------------------------------------------------------------------------------------------".Dump();
+//sw.Restart();
+//TradingDayContext context3 = new TradingDayContext();
+//context3.Database.Log = LogIt;
+//List<TradingDay> list3 = context3.TradingDays.Include("ExchangeRates").ToList();
+//sw.Stop();
+//$"{list3.Count} TradingDays mit ExchangeRates per Include('NavigationPropName') geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
+////list3.Dump();
+//"------------------------------------------------------------------------------------------------------".Dump();
+//
+//sw.Restart();
+//TradingDayContext context4 = new TradingDayContext();
+//context4.Database.Log = LogIt;
+//List<TradingDay> list4 = context4.TradingDays.Include(td => td.ExchangeRates).ToList();
+//sw.Stop();
+//$"{list4.Count} TradingDays mit ExchangeRates per Include(Lambda) geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
+////list4.Dump();
+//"------------------------------------------------------------------------------------------------------".Dump();
+//
+//sw.Restart();
+//TradingDayContext contex5 = new TradingDayContext();
+//contex5.Database.Log = LogIt;
+//var qDays = (from td in contex5.TradingDays
+//			 select new
+//			 {
+//				 td.Date,
+//				 td.ExchangeRates
+//			 }).ToList();
+//sw.Stop();
+//$"{qDays.Count} TradingDays mit ExchangeRates per Projektion geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
+////qDays.Dump();
+//"------------------------------------------------------------------------------------------------------".Dump();
+//
+//sw.Restart();
+//TradingDayContext context6 = new TradingDayContext();
+//context6.Database.Log = LogIt;
+//List<TradingDay> list6 = context4.TradingDays.Include(td => td.ExchangeRates).AsNoTracking().ToList();
+//sw.Stop();
+//$"{list6.Count} TradingDays mit ExchangeRates per Include(Lambda) ohne Tracking geladen in {sw.ElapsedTicks:N0} Ticks ({sw.ElapsedMilliseconds:N0}ms).".Dump();
+////list6.Dump();
+//"------------------------------------------------------------------------------------------------------".Dump();
 
 	}
 
@@ -105,7 +104,7 @@ $"{list6.Count} TradingDays mit ExchangeRates per Include(Lambda) ohne Tracking 
 void LogIt(string logString)
 {
 	return;
-	//logString.Dump();
+//	logString.Dump();
 }
 
 class TradingDay

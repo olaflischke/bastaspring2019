@@ -11,29 +11,9 @@ string url = @"\\atuin\Olaf\Entwicklung\LINQPad\LINQPad Queries\eurofxref-hist.x
 Stopwatch sw = new Stopwatch();
 
 sw.Restart();
-XDocument doc2 = XDocument.Load(url);
-sw.Stop();
-$"\n\rXDocument geladen in {sw.ElapsedMilliseconds:N0} ms.".Dump();
-
-
-$"\n\rParallele Objekterstellung...".Dump();
-
-sw.Restart();
-IEnumerable<TradingDay> qTradingdaysPar = from nd in doc2.Root.Descendants().AsParallel().WithExecutionMode(ParallelExecutionMode.ForceParallelism)
-										  where nd.Name.LocalName == "Cube"
-												  && nd.Attributes().Any(at => at.Name == "time")
-										  // select new TradingDay(nd, true);
-										  select new TradingDay(nd);
-
-List<TradingDay> listPar = qTradingdaysPar.ToList();
-sw.Stop();
-$"{listPar.Count} TradingDays parallel erzeugt in {sw.ElapsedTicks:N0} tks".Dump();
-
-sw.Restart();
 XDocument doc1 = XDocument.Load(url);
 sw.Stop();
 $"\n\rXDocument geladen in {sw.ElapsedMilliseconds:N0} ms.".Dump();
-
 
 $"\n\rSequentielle Objekterstellung...".Dump();
 sw.Restart();
@@ -46,6 +26,22 @@ List<TradingDay> list = qTradingdays.ToList();
 sw.Stop();
 $"{list.Count} TradingDays erzeugt in {sw.ElapsedTicks:N0} tks".Dump();
 
+sw.Restart();
+XDocument doc2 = XDocument.Load(url);
+sw.Stop();
+$"\n\rXDocument geladen in {sw.ElapsedMilliseconds:N0} ms.".Dump();
+
+$"\n\rParallele Objekterstellung...".Dump();
+sw.Restart();
+IEnumerable<TradingDay> qTradingdaysPar = from nd in doc2.Root.Descendants().AsParallel().WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+										  where nd.Name.LocalName == "Cube"
+												  && nd.Attributes().Any(at => at.Name == "time")
+										  // select new TradingDay(nd, true);
+										  select new TradingDay(nd);
+
+List<TradingDay> listPar = qTradingdaysPar.ToList();
+sw.Stop();
+$"{listPar.Count} TradingDays parallel erzeugt in {sw.ElapsedTicks:N0} tks".Dump();
 
 }
 	
